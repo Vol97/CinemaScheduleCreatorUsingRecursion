@@ -9,7 +9,6 @@ namespace CinemaScheduleCreatorUsingRecursion
         public static List<Movie> Movies { get; set; }
         public List<Movie> MoviesInSchedule { get; set; }
         public int FreeTime { get; set; }
-
         public List<CinemaHall> Next { get; set; }
 
         public CinemaHall(int freeTime, List<Movie> moviesInSchedule = null)
@@ -17,7 +16,7 @@ namespace CinemaScheduleCreatorUsingRecursion
             FreeTime = freeTime;
             Next = new List<CinemaHall>();
 
-            if(moviesInSchedule is null)
+            if (moviesInSchedule is null)
             {
                 MoviesInSchedule = new List<Movie>();
             }
@@ -31,7 +30,7 @@ namespace CinemaScheduleCreatorUsingRecursion
         {
             foreach (var movie in Movies)
             {
-                if(FreeTime >= movie.RunningTime)
+                if (FreeTime >= movie.RunningTime)
                 {
                     List<Movie> tmp = new List<Movie>(MoviesInSchedule);
                     tmp.Add(movie);
@@ -42,9 +41,9 @@ namespace CinemaScheduleCreatorUsingRecursion
             }
         }
 
-        public void ShowLastMoviesInSchedule()
+        public void ShowMoviesInSchedule()
         {
-            if(Next.Count == 0)
+            if (Next.Count == 0)
             {
                 foreach (var movie in MoviesInSchedule)
                 {
@@ -57,9 +56,43 @@ namespace CinemaScheduleCreatorUsingRecursion
             {
                 foreach (var cinemaHall in Next)
                 {
-                    cinemaHall.ShowLastMoviesInSchedule();
+                    cinemaHall.ShowMoviesInSchedule();
                 }
             }
+        }
+
+        public ReturnModel GetBestMovieSchedule()
+        {
+            if (Next.Count == 0)
+            {
+                return new ReturnModel(FreeTime, MoviesInSchedule);
+            }
+            else
+            {
+                List<ReturnModel> returnModels = new List<ReturnModel>();
+
+                foreach (CinemaHall cinemaHall in Next)
+                {
+                    returnModels.Add(cinemaHall.GetBestMovieSchedule());
+                }
+
+                ReturnModel bestSchedule = returnModels[0];
+
+                foreach (ReturnModel returnModel in returnModels)
+                {
+                    foreach (Movie movie in Movies)
+                    {
+                        if (returnModel.MoviesInSchedule.Contains(movie))
+                        {
+
+                        }
+
+                    }
+                }
+
+                return bestSchedule;
+            }
+
         }
     }
 }

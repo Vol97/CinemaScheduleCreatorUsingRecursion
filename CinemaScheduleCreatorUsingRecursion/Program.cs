@@ -20,7 +20,7 @@ namespace CinemaScheduleCreatorUsingRecursion
             CinemaHall cinemaHall = new CinemaHall(840);
 
             cinemaHall.CreateSchedule();
-            cinemaHall.ShowLastMoviesInSchedule();
+            cinemaHall.ShowMoviesInSchedule();
         }
     }
 }
