@@ -68,7 +68,10 @@ namespace CinemaScheduleCreatorUsingRecursion
         {
             bool result = false;
 
-            
+            foreach (Movie movie in Movies)
+            {
+                
+            }
 
             return result;
         }

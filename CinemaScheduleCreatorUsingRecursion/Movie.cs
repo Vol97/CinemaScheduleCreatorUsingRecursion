@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CinemaScheduleCreatorUsingRecursion
 {
-    public class Movie
+    public class Movie : IComparable
     {
         public string MovieTitle { get; set; }
         public int RunningTimeInMinutes { get; set; }
@@ -39,6 +39,21 @@ namespace CinemaScheduleCreatorUsingRecursion
                     result = true;
                 }
             }
+
+            return result;
+        }
+
+        public int CompareTo(object obj)
+        {
+            Movie movie = (Movie)obj;
+            int result;
+
+            if (this.RunningTimeInMinutes > movie.RunningTimeInMinutes)
+                result = 1;
+            else if (this.RunningTimeInMinutes < movie.RunningTimeInMinutes)
+                result = - 1;
+            else
+                result = 0;
 
             return result;
         }
