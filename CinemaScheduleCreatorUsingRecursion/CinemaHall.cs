@@ -30,11 +30,11 @@ namespace CinemaScheduleCreatorUsingRecursion
         {
             foreach (var movie in Movies)
             {
-                if (FreeTime >= movie.RunningTime)
+                if (FreeTime >= movie.RunningTimeInMinutes)
                 {
                     List<Movie> tmp = new List<Movie>(MoviesInSchedule);
                     tmp.Add(movie);
-                    CinemaHall cinemaHall = new CinemaHall(FreeTime - movie.RunningTime, tmp);
+                    CinemaHall cinemaHall = new CinemaHall(FreeTime - movie.RunningTimeInMinutes, tmp);
                     Next.Add(cinemaHall);
                     cinemaHall.CreateSchedule();
                 }
@@ -59,40 +59,6 @@ namespace CinemaScheduleCreatorUsingRecursion
                     cinemaHall.ShowMoviesInSchedule();
                 }
             }
-        }
-
-        public ReturnModel GetBestMovieSchedule()
-        {
-            if (Next.Count == 0)
-            {
-                return new ReturnModel(FreeTime, MoviesInSchedule);
-            }
-            else
-            {
-                List<ReturnModel> returnModels = new List<ReturnModel>();
-
-                foreach (CinemaHall cinemaHall in Next)
-                {
-                    returnModels.Add(cinemaHall.GetBestMovieSchedule());
-                }
-
-                ReturnModel bestSchedule = returnModels[0];
-
-                foreach (ReturnModel returnModel in returnModels)
-                {
-                    foreach (Movie movie in Movies)
-                    {
-                        if (returnModel.MoviesInSchedule.Contains(movie))
-                        {
-
-                        }
-
-                    }
-                }
-
-                return bestSchedule;
-            }
-
         }
     }
 }
