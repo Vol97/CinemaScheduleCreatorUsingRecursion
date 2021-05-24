@@ -7,20 +7,42 @@ namespace CinemaScheduleCreatorUsingRecursion
     {
         static void Main(string[] args)
         {
-            CinemaHall.Movies = new List<Movie>()
+            List<Movie> movies = new List<Movie>()
             {
-                new Movie("LOTR", 120),
-                new Movie("SW", 200),
-                new Movie("Sonic", 134),
-                new Movie("Naruto", 167),
-                new Movie("Game", 190),
-                new Movie("Sick", 233)
+                new Movie("sas", 120),
+                new Movie("afgas", 125),
+                new Movie("dfh", 200),
+                new Movie("rsas", 111),
+                new Movie("nsas", 222),
+                new Movie("zsas", 333)
             };
 
-            CinemaHall cinemaHall = new CinemaHall(840);
+            foreach (Movie movie in movies)
+            {
+                Console.WriteLine($"{movie.MovieTitle} {movie.RunningTimeInMinutes}");
+            }
 
-            cinemaHall.CreateSchedule();
-            cinemaHall.ShowMoviesInSchedule();
+            Console.WriteLine();
+
+            movies.Sort();
+
+            foreach (Movie movie in movies)
+            {
+                Console.WriteLine($"{movie.MovieTitle} {movie.RunningTimeInMinutes}");
+            }
+
+            Console.WriteLine();
+
+            movies.Reverse();
+
+            foreach (Movie movie in movies)
+            {
+                Console.WriteLine($"{movie.MovieTitle} {movie.RunningTimeInMinutes}");
+            }
+
+            Console.WriteLine();
+
+            Console.WriteLine(movies[0].ToString());
         }
     }
 }

@@ -6,59 +6,125 @@ namespace CinemaScheduleCreatorUsingRecursion
 {
     public class CinemaHall
     {
-        public static List<Movie> Movies { get; set; }
-        public List<Movie> MoviesInSchedule { get; set; }
-        public int FreeTime { get; set; }
-        public List<CinemaHall> Next { get; set; }
+        public static List<Movie> _movies;
+        public static int _freeTime;
+        public Schedule _bestSchedule;
 
-        public CinemaHall(int freeTime, List<Movie> moviesInSchedule = null)
+        public static List<Movie> Movies
         {
+            get
+            {
+                return _movies;
+            }
+            set
+            {
+                if (!(value is null))
+                {
+                    _movies = value;
+                }
+                else
+                {
+                    throw new ArgumentNullException();
+                }
+            }
+        }
+
+        public static int FreeTime
+        {
+            get
+            {
+                return _freeTime;
+            }
+            set
+            {
+                if (value >= 0)
+                {
+                    _freeTime = value;
+                }
+                else
+                {
+                    _freeTime = 0;
+                }
+            }
+        }
+
+        public Schedule BestSchedule
+        {
+            get
+            {
+                return _bestSchedule;
+            }
+            set
+            {
+                if (!(value is null))
+                {
+                    _bestSchedule = value;
+                }
+                else
+                {
+                    throw new ArgumentNullException();
+                }
+            }
+        }
+
+        private CinemaHall(List<Movie> movies, int freeTime)
+        {
+            if (!(movies is null))
+            {
+                Movies = movies;
+                Movies.Sort();
+                Movies.Reverse();
+            }
+            else
+            {
+                Movies = new List<Movie>();
+            }
+
             FreeTime = freeTime;
-            Next = new List<CinemaHall>();
-
-            if (moviesInSchedule is null)
-            {
-                MoviesInSchedule = new List<Movie>();
-            }
-            else
-            {
-                MoviesInSchedule = moviesInSchedule;
-            }
         }
 
-        public void CreateSchedule()
+        public static CinemaHall CreateCinemaHall(List<Movie> movies, int freeTime)
         {
-            foreach (var movie in Movies)
+            if(!(movies is null) && freeTime >= 0)
             {
-                if (FreeTime >= movie.RunningTimeInMinutes)
-                {
-                    List<Movie> tmp = new List<Movie>(MoviesInSchedule);
-                    tmp.Add(movie);
-                    CinemaHall cinemaHall = new CinemaHall(FreeTime - movie.RunningTimeInMinutes, tmp);
-                    Next.Add(cinemaHall);
-                    cinemaHall.CreateSchedule();
-                }
+                return new CinemaHall(movies, freeTime);
             }
+
+            throw new ArgumentException();
         }
 
-        public void ShowMoviesInSchedule()
-        {
-            if (Next.Count == 0)
-            {
-                foreach (var movie in MoviesInSchedule)
-                {
-                    Console.Write(movie.MovieTitle + " ");
-                }
+        //public void CreateSchedule()
+        //{
+        //    foreach (var movie in Movies)
+        //    {
+        //        if (FreeTime >= movie.RunningTimeInMinutes)
+        //        {
+        //            List<Movie> tmp = new List<Movie>(MoviesInSchedule);
+        //            tmp.Add(movie);
+        //            CinemaHall cinemaHall = new CinemaHall(FreeTime - movie.RunningTimeInMinutes, tmp);
+        //            cinemaHall.CreateSchedule();
+        //        }
+        //    }
+        //}
 
-                Console.WriteLine();
-            }
-            else
-            {
-                foreach (var cinemaHall in Next)
-                {
-                    cinemaHall.ShowMoviesInSchedule();
-                }
-            }
-        }
+        //public void ShowMoviesInSchedule()
+        //{
+        //    if (Next.Count == 0)
+        //    {
+        //        foreach (var movie in MoviesInSchedule)
+        //        {
+        //            Console.Write(movie.MovieTitle + " ");
+        //        }
+
+        //        Console.WriteLine();
+        //    }
+        //    else
+        //    {
+        //        foreach (var cinemaHall in Next)
+        //        {
+        //            cinemaHall.ShowMoviesInSchedule();
+        //        }
+        //    }
+        //}
     }
 }

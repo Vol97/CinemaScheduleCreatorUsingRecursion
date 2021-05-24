@@ -43,19 +43,28 @@ namespace CinemaScheduleCreatorUsingRecursion
             return result;
         }
 
+        public override string ToString()
+        {
+            return $"Movie title: {this.MovieTitle}. Duration: {this.RunningTimeInMinutes}";
+        }
         public int CompareTo(object obj)
         {
-            Movie movie = (Movie)obj;
-            int result;
+            if(obj is Movie)
+            {
+                Movie movie = (Movie)obj;
+                int result;
 
-            if (this.RunningTimeInMinutes > movie.RunningTimeInMinutes)
-                result = 1;
-            else if (this.RunningTimeInMinutes < movie.RunningTimeInMinutes)
-                result = - 1;
-            else
-                result = 0;
+                if (this.RunningTimeInMinutes > movie.RunningTimeInMinutes)
+                    result = 1;
+                else if (this.RunningTimeInMinutes < movie.RunningTimeInMinutes)
+                    result = -1;
+                else
+                    result = 0;
 
-            return result;
+                return result;
+            }
+
+            throw new ArgumentException("Invalid object type");
         }
     }
 }
