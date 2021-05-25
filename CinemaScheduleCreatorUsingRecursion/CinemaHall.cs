@@ -93,6 +93,37 @@ namespace CinemaScheduleCreatorUsingRecursion
             throw new ArgumentException();
         }
 
+        private void CreateSchedules(Schedule currentSchedule)
+        {
+            if (currentSchedule != null)
+            {
+                foreach (Movie movie in Movies)
+                {
+                    bool movieIsAdded = false;
+
+                    if (currentSchedule.AddMovie(movie))
+                    {
+                        CreateSchedules(currentSchedule);
+                        movieIsAdded = true;
+                    }
+
+                    if(CheckIfGivenScheduleIsTheBest(currentSchedule))
+                    {
+                        BestSchedule = currentSchedule;
+                    }
+
+                    if (movieIsAdded)
+                    {
+                        currentSchedule.RemoveMovie(movie);
+                    }
+                }
+            }
+            else
+            {
+                throw new ArgumentNullException("Current schedule is null");
+            }
+        }
+
         //public void CreateSchedule()
         //{
         //    foreach (var movie in Movies)
