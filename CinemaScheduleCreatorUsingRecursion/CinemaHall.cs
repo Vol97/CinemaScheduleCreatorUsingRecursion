@@ -7,7 +7,7 @@ namespace CinemaScheduleCreatorUsingRecursion
     public class CinemaHall
     {
         public static List<Movie> _movies;
-        public static int _freeTime;
+        public static int _workingTime;
         public Schedule _bestSchedule;
 
         public static List<Movie> Movies
@@ -29,21 +29,21 @@ namespace CinemaScheduleCreatorUsingRecursion
             }
         }
 
-        public static int FreeTime
+        public static int WorkingTime
         {
             get
             {
-                return _freeTime;
+                return _workingTime;
             }
             set
             {
                 if (value >= 0)
                 {
-                    _freeTime = value;
+                    _workingTime = value;
                 }
                 else
                 {
-                    _freeTime = 0;
+                    _workingTime = 0;
                 }
             }
         }
@@ -67,7 +67,7 @@ namespace CinemaScheduleCreatorUsingRecursion
             }
         }
 
-        private CinemaHall(List<Movie> movies, int freeTime)
+        private CinemaHall(List<Movie> movies, int workingTime)
         {
             if (!(movies is null))
             {
@@ -80,20 +80,21 @@ namespace CinemaScheduleCreatorUsingRecursion
                 Movies = new List<Movie>();
             }
 
-            FreeTime = freeTime;
+            WorkingTime = workingTime;
+            BestSchedule = new Schedule();
         }
 
-        public static CinemaHall CreateCinemaHall(List<Movie> movies, int freeTime)
+        public static CinemaHall CreateCinemaHall(List<Movie> movies, int workingTime)
         {
-            if(!(movies is null) && freeTime >= 0)
+            if (!(movies is null) && workingTime >= 0)
             {
-                return new CinemaHall(movies, freeTime);
+                return new CinemaHall(movies, workingTime);
             }
 
             throw new ArgumentException();
         }
 
-        private void CreateSchedules(Schedule currentSchedule)
+        public void CreateSchedule(Schedule currentSchedule)
         {
             if (currentSchedule != null)
             {
@@ -103,14 +104,16 @@ namespace CinemaScheduleCreatorUsingRecursion
 
                     if (currentSchedule.AddMovie(movie))
                     {
-                        CreateSchedules(currentSchedule);
+                        CreateSchedule(currentSchedule);
                         movieIsAdded = true;
                     }
 
-                    if(CheckIfGivenScheduleIsTheBest(currentSchedule))
+                    if (BestSchedule.UniqueMoviesCount == Movies.Count && BestSchedule.FreeTime == 0)
                     {
-                        BestSchedule = currentSchedule;
+                        return;
                     }
+
+                    CheckIfGivenScheduleIsTheBest(currentSchedule);
 
                     if (movieIsAdded)
                     {
@@ -124,38 +127,17 @@ namespace CinemaScheduleCreatorUsingRecursion
             }
         }
 
-        //public void CreateSchedule()
-        //{
-        //    foreach (var movie in Movies)
-        //    {
-        //        if (FreeTime >= movie.RunningTimeInMinutes)
-        //        {
-        //            List<Movie> tmp = new List<Movie>(MoviesInSchedule);
-        //            tmp.Add(movie);
-        //            CinemaHall cinemaHall = new CinemaHall(FreeTime - movie.RunningTimeInMinutes, tmp);
-        //            cinemaHall.CreateSchedule();
-        //        }
-        //    }
-        //}
-
-        //public void ShowMoviesInSchedule()
-        //{
-        //    if (Next.Count == 0)
-        //    {
-        //        foreach (var movie in MoviesInSchedule)
-        //        {
-        //            Console.Write(movie.MovieTitle + " ");
-        //        }
-
-        //        Console.WriteLine();
-        //    }
-        //    else
-        //    {
-        //        foreach (var cinemaHall in Next)
-        //        {
-        //            cinemaHall.ShowMoviesInSchedule();
-        //        }
-        //    }
-        //}
+        private void CheckIfGivenScheduleIsTheBest(Schedule currentSchedule)
+        {
+            if (currentSchedule.FreeTime == 0 &&
+                Movies.Count == currentSchedule.UniqueMoviesCount)
+            {
+                BestSchedule = new Schedule(currentSchedule);
+            }
+            else if (currentSchedule.UniqueMoviesCount > BestSchedule.UniqueMoviesCount)
+            {
+                BestSchedule = new Schedule(currentSchedule);
+            }
+        }
     }
 }

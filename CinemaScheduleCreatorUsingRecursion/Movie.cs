@@ -47,6 +47,7 @@ namespace CinemaScheduleCreatorUsingRecursion
         {
             return $"Movie title: {this.MovieTitle}. Duration: {this.RunningTimeInMinutes}";
         }
+
         public int CompareTo(object obj)
         {
             if(obj is Movie)

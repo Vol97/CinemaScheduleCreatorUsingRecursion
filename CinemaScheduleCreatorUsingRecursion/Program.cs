@@ -9,40 +9,20 @@ namespace CinemaScheduleCreatorUsingRecursion
         {
             List<Movie> movies = new List<Movie>()
             {
-                new Movie("sas", 120),
-                new Movie("afgas", 125),
-                new Movie("dfh", 200),
-                new Movie("rsas", 111),
-                new Movie("nsas", 222),
-                new Movie("zsas", 333)
+                new Movie("AAA", 5),
+                new Movie("BBB", 10),
+                new Movie("CCC", 15),
+                new Movie("DDD", 20),
+                new Movie("EEE", 20),
+                new Movie("FFF", 20)
             };
 
-            foreach (Movie movie in movies)
-            {
-                Console.WriteLine($"{movie.MovieTitle} {movie.RunningTimeInMinutes}");
-            }
+            CinemaHall cinemaHall = CinemaHall.CreateCinemaHall(movies, 150);
+            Schedule schedule = new Schedule();
 
-            Console.WriteLine();
+            cinemaHall.CreateSchedule(schedule);
 
-            movies.Sort();
-
-            foreach (Movie movie in movies)
-            {
-                Console.WriteLine($"{movie.MovieTitle} {movie.RunningTimeInMinutes}");
-            }
-
-            Console.WriteLine();
-
-            movies.Reverse();
-
-            foreach (Movie movie in movies)
-            {
-                Console.WriteLine($"{movie.MovieTitle} {movie.RunningTimeInMinutes}");
-            }
-
-            Console.WriteLine();
-
-            Console.WriteLine(movies[0].ToString());
+            Console.WriteLine(cinemaHall.BestSchedule);
         }
     }
 }

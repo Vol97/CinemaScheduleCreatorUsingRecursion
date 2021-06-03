@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace CinemaScheduleCreatorUsingRecursion
@@ -7,19 +8,18 @@ namespace CinemaScheduleCreatorUsingRecursion
     public class Schedule
     {
         public List<Movie> MoviesInSchedule { get; set; }
-        public int FreeTime { get; set; }
-        public int UniqueMoviesCount { get; }
+        public int FreeTime => CinemaHall.WorkingTime - TotalMoviesRuntimeInSchedule;
+        public int UniqueMoviesCount => GetUniqueMoviesCountInSchedule();
+        public int TotalMoviesRuntimeInSchedule => GetTotalMoviesRuntimeInSchedule();
 
-        public Schedule(int freetime)
+        public Schedule()
         {
             MoviesInSchedule = new List<Movie>();
-            FreeTime = freetime;
         }
 
         public Schedule(Schedule schedule)
         {
-            FreeTime = schedule.FreeTime;
-            MoviesInSchedule = schedule.MoviesInSchedule;
+            MoviesInSchedule = new List<Movie>(schedule.MoviesInSchedule);
         }
 
         public bool AddMovie(Movie movie)
@@ -51,13 +51,11 @@ namespace CinemaScheduleCreatorUsingRecursion
             }
         }
 
-        
-
-        private int GetTotalMoviesInScheduleRuntime(Schedule schedule)
+        private int GetTotalMoviesRuntimeInSchedule()
         {
             int totalRuntime = 0;
 
-            foreach (Movie movie in schedule.MoviesInSchedule)
+            foreach (Movie movie in MoviesInSchedule)
             {
                 totalRuntime += movie.RunningTimeInMinutes;
             }
@@ -65,67 +63,33 @@ namespace CinemaScheduleCreatorUsingRecursion
             return totalRuntime;
         }
 
-        private int GetUniqueMoviesInScheduleCount(Schedule schedule)
+        private int GetUniqueMoviesCountInSchedule()
         {
             int count = 0;
+            List<Movie> uniqueMovies = new List<Movie>(CinemaHall.Movies);
 
-            foreach (Movie movie in schedule.MoviesInSchedule)
+            foreach (Movie movie in MoviesInSchedule)
             {
-                count++;
+                if(uniqueMovies.Contains(movie))
+                {
+                    uniqueMovies.Remove(movie);
+                    count++;
+                }
             }
 
             return count;
         }
 
-        //public void CreateSchedule()
-        //{
-        //    Schedule currentSchedule;
-        //    Schedule bestSchedule;
+        public override string ToString()
+        {
+            StringBuilder result = new StringBuilder();
 
-        //    foreach (var movie in Movies)
-        //    {
-        //        if (FreeTime >= movie.RunningTimeInMinutes)
-        //        {
-        //            List<Movie> tmp = new List<Movie>(MoviesInSchedule);
-        //            tmp.Add(movie);
-        //            currentSchedule = new Schedule(FreeTime - movie.RunningTimeInMinutes, tmp);
+            foreach (Movie movie in MoviesInSchedule)
+            {
+                result.Append(movie.ToString()).Append("\n");
+            }
 
-        //            if (CheckBestScheduleCriteriaAccordance(currentSchedule))
-        //            {
-        //                bestSchedule = currentSchedule;
-        //            }
-
-        //            currentSchedule.CreateSchedule();
-        //        }
-        //    }
-        //}
-
-        //public bool CheckBestScheduleCriteriaAccordance(Schedule schedule)
-        //{
-        //    bool result = false;
-        //    int uniqueMoviesCount = 0;
-
-        //    foreach(Movie movie in Movies)
-        //    {
-        //        if(schedule.MoviesInSchedule.Contains(movie))
-        //        {
-        //            uniqueMoviesCount++;
-        //        }
-        //    }
-
-        //    return result;
-        //}
-
-        //private bool CheckIfAllMoviesCouldFitInSchedule()
-        //{
-        //    bool result = false;
-
-        //    foreach (Movie movie in Movies)
-        //    {
-
-        //    }
-
-        //    return result;
-        //}
+            return result.ToString();
+        }
     }
 }
