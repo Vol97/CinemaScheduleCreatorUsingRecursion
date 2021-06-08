@@ -15,18 +15,17 @@ namespace CinemaScheduleCreatorUsingRecursion
 
         public static Movie CreateMovie(string movieTitle, int runningTimeInMinutes)
         {
-            if (!(movieTitle is null) && runningTimeInMinutes >= 0)
+            if (movieTitle != null && runningTimeInMinutes >= 0)
             {
                 return new Movie(movieTitle, runningTimeInMinutes);
             }
-            else if (movieTitle is null)
+
+            if (movieTitle == null)
             {
                 throw new ArgumentNullException();
             }
-            else
-            {
-                throw new ArgumentException();
-            }
+
+            throw new ArgumentException();
         }
 
         public override bool Equals(object obj)
@@ -37,10 +36,8 @@ namespace CinemaScheduleCreatorUsingRecursion
             {
                 Movie movie = (Movie)obj;
 
-                if (this.MovieTitle == movie.MovieTitle && this.RunningTimeInMinutes == movie.RunningTimeInMinutes)
-                {
-                    result = true;
-                }
+                result = MovieTitle == movie.MovieTitle &&
+                         RunningTimeInMinutes == movie.RunningTimeInMinutes;
             }
 
             return result;
@@ -48,7 +45,7 @@ namespace CinemaScheduleCreatorUsingRecursion
 
         public override string ToString()
         {
-            return $"Movie title: {this.MovieTitle}. Duration: {this.RunningTimeInMinutes}";
+            return $"Movie title: {MovieTitle}. Duration: {RunningTimeInMinutes}";
         }
 
         public int CompareTo(object obj)
@@ -56,16 +53,8 @@ namespace CinemaScheduleCreatorUsingRecursion
             if (obj is Movie)
             {
                 Movie movie = (Movie)obj;
-                int result;
 
-                if (this.RunningTimeInMinutes > movie.RunningTimeInMinutes)
-                    result = 1;
-                else if (this.RunningTimeInMinutes < movie.RunningTimeInMinutes)
-                    result = -1;
-                else
-                    result = 0;
-
-                return result;
+                return RunningTimeInMinutes.CompareTo(movie.RunningTimeInMinutes);
             }
 
             throw new ArgumentException("Invalid object type");

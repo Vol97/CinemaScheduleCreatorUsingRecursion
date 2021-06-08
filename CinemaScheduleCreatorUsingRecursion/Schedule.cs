@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace CinemaScheduleCreatorUsingRecursion
 {
@@ -9,7 +10,7 @@ namespace CinemaScheduleCreatorUsingRecursion
         public List<Movie> MoviesInSchedule { get; set; }
         public int FreeTime => CinemaHall.WorkingTime - TotalMoviesRuntimeInSchedule;
         public int UniqueMoviesCount => GetUniqueMoviesCountInSchedule();
-        public int TotalMoviesRuntimeInSchedule => GetTotalMoviesRuntimeInSchedule();
+        public int TotalMoviesRuntimeInSchedule => MoviesInSchedule.Sum(movie => movie.RunningTimeInMinutes);
 
         public Schedule()
         {
@@ -23,7 +24,7 @@ namespace CinemaScheduleCreatorUsingRecursion
 
         public static Schedule CreateSchedule(Schedule schedule)
         {
-            if (!(schedule is null) && !(schedule.MoviesInSchedule is null))
+            if (schedule != null)
             {
                 return new Schedule(schedule);
             }
@@ -33,7 +34,7 @@ namespace CinemaScheduleCreatorUsingRecursion
 
         public bool AddMovie(Movie movie)
         {
-            if (!(movie is null))
+            if (movie != null)
             {
                 bool result = false;
 
@@ -51,7 +52,7 @@ namespace CinemaScheduleCreatorUsingRecursion
 
         public void RemoveMovie(Movie movie)
         {
-            if (!(movie is null))
+            if (movie != null)
             {
                 if (!(MoviesInSchedule is null))
                 {
@@ -60,33 +61,19 @@ namespace CinemaScheduleCreatorUsingRecursion
             }
         }
 
-        private int GetTotalMoviesRuntimeInSchedule()
-        {
-            int totalRuntime = 0;
-
-            foreach (Movie movie in MoviesInSchedule)
-            {
-                totalRuntime += movie.RunningTimeInMinutes;
-            }
-
-            return totalRuntime;
-        }
-
         private int GetUniqueMoviesCountInSchedule()
         {
-            int count = 0;
-            List<Movie> uniqueMovies = new List<Movie>(CinemaHall.Movies);
+            List<Movie> uniqueMovies = new List<Movie>();
 
             foreach (Movie movie in MoviesInSchedule)
             {
-                if (uniqueMovies.Contains(movie))
+                if (!uniqueMovies.Contains(movie))
                 {
-                    uniqueMovies.Remove(movie);
-                    count++;
+                    uniqueMovies.Add(movie);
                 }
             }
 
-            return count;
+            return uniqueMovies.Count;
         }
 
         public override string ToString()
@@ -95,7 +82,7 @@ namespace CinemaScheduleCreatorUsingRecursion
 
             foreach (Movie movie in MoviesInSchedule)
             {
-                result.Append(movie.ToString()).Append("\n");
+                result.Append($"{movie}{Environment.NewLine}");
             }
 
             return result.ToString();

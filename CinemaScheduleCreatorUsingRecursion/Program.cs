@@ -15,7 +15,7 @@ namespace CinemaScheduleCreatorUsingRecursion
                 Movie.CreateMovie("DDD", 20)
             };
 
-            CinemaHall cinemaHall = CinemaHall.CreateCinemaHall(movies, 100);
+            CinemaHall cinemaHall = CinemaHall.CreateCinemaHall(movies, 50);
             Schedule schedule = new Schedule();
             Console.WriteLine(cinemaHall.CreateSchedule(schedule));
         }

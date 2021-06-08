@@ -15,7 +15,7 @@ namespace CinemaScheduleCreatorUsingRecursion
 
             set
             {
-                if (!(value is null))
+                if (value != null)
                 {
                     _movies = value;
                 }
@@ -30,17 +30,7 @@ namespace CinemaScheduleCreatorUsingRecursion
         {
             get => _workingTime;
 
-            set
-            {
-                if (value >= 0)
-                {
-                    _workingTime = value;
-                }
-                else
-                {
-                    _workingTime = 0;
-                }
-            }
+            set => _workingTime = value >= 0 ? value : 0;
         }
 
         public Schedule BestSchedule
@@ -49,7 +39,7 @@ namespace CinemaScheduleCreatorUsingRecursion
 
             set
             {
-                if (!(value is null))
+                if (value != null)
                 {
                     _bestSchedule = value;
                 }
@@ -62,7 +52,7 @@ namespace CinemaScheduleCreatorUsingRecursion
 
         private CinemaHall(List<Movie> movies, int workingTime)
         {
-            if (!(movies is null))
+            if (movies != null)
             {
                 Movies = movies;
                 Movies.Sort();
@@ -79,7 +69,7 @@ namespace CinemaScheduleCreatorUsingRecursion
 
         public static CinemaHall CreateCinemaHall(List<Movie> movies, int workingTime)
         {
-            if (!(movies is null) && workingTime >= 0)
+            if (movies != null && workingTime >= 0)
             {
                 return new CinemaHall(movies, workingTime);
             }
