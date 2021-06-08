@@ -1,98 +1,118 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace CinemaScheduleCreatorUsingRecursion
 {
     public class CinemaHall
     {
-        public static List<Movie> Movies { get; set; }
-        public List<Movie> MoviesInSchedule { get; set; }
-        public int FreeTime { get; set; }
-        public List<CinemaHall> Next { get; set; }
+        public static List<Movie> _movies;
+        public static int _workingTime;
+        public Schedule _bestSchedule;
 
-        public CinemaHall(int freeTime, List<Movie> moviesInSchedule = null)
+        public static List<Movie> Movies
         {
-            FreeTime = freeTime;
-            Next = new List<CinemaHall>();
+            get => _movies;
 
-            if (moviesInSchedule is null)
+            set
             {
-                MoviesInSchedule = new List<Movie>();
-            }
-            else
-            {
-                MoviesInSchedule = moviesInSchedule;
-            }
-        }
-
-        public void CreateSchedule()
-        {
-            foreach (var movie in Movies)
-            {
-                if (FreeTime >= movie.RunningTime)
+                if (value != null)
                 {
-                    List<Movie> tmp = new List<Movie>(MoviesInSchedule);
-                    tmp.Add(movie);
-                    CinemaHall cinemaHall = new CinemaHall(FreeTime - movie.RunningTime, tmp);
-                    Next.Add(cinemaHall);
-                    cinemaHall.CreateSchedule();
+                    _movies = value;
+                }
+                else
+                {
+                    throw new ArgumentNullException();
                 }
             }
         }
 
-        public void ShowMoviesInSchedule()
+        public static int WorkingTime
         {
-            if (Next.Count == 0)
-            {
-                foreach (var movie in MoviesInSchedule)
-                {
-                    Console.Write(movie.MovieTitle + " ");
-                }
+            get => _workingTime;
 
-                Console.WriteLine();
-            }
-            else
+            set => _workingTime = value >= 0 ? value : 0;
+        }
+
+        public Schedule BestSchedule
+        {
+            get => _bestSchedule;
+
+            set
             {
-                foreach (var cinemaHall in Next)
+                if (value != null)
                 {
-                    cinemaHall.ShowMoviesInSchedule();
+                    _bestSchedule = value;
+                }
+                else
+                {
+                    throw new ArgumentNullException();
                 }
             }
         }
 
-        public ReturnModel GetBestMovieSchedule()
+        private CinemaHall(List<Movie> movies, int workingTime)
         {
-            if (Next.Count == 0)
+            if (movies != null)
             {
-                return new ReturnModel(FreeTime, MoviesInSchedule);
+                Movies = movies;
+                Movies.Sort();
+                Movies.Reverse();
             }
             else
             {
-                List<ReturnModel> returnModels = new List<ReturnModel>();
+                Movies = new List<Movie>();
+            }
 
-                foreach (CinemaHall cinemaHall in Next)
+            WorkingTime = workingTime;
+            BestSchedule = new Schedule();
+        }
+
+        public static CinemaHall CreateCinemaHall(List<Movie> movies, int workingTime)
+        {
+            if (movies != null && workingTime >= 0)
+            {
+                return new CinemaHall(movies, workingTime);
+            }
+
+            throw new ArgumentException();
+        }
+
+        public Schedule CreateSchedule(Schedule currentSchedule)
+        {
+            if (currentSchedule != null)
+            {
+                foreach (Movie movie in Movies)
                 {
-                    returnModels.Add(cinemaHall.GetBestMovieSchedule());
-                }
+                    bool movieIsAdded = false;
 
-                ReturnModel bestSchedule = returnModels[0];
-
-                foreach (ReturnModel returnModel in returnModels)
-                {
-                    foreach (Movie movie in Movies)
+                    if (currentSchedule.AddMovie(movie))
                     {
-                        if (returnModel.MoviesInSchedule.Contains(movie))
-                        {
+                        CreateSchedule(currentSchedule);
+                        movieIsAdded = true;
+                    }
 
-                        }
+                    CheckIfGivenScheduleIsTheBest(currentSchedule);
 
+                    if (movieIsAdded)
+                    {
+                        currentSchedule.RemoveMovie(movie);
                     }
                 }
-
-                return bestSchedule;
+            }
+            else
+            {
+                throw new ArgumentNullException("Current schedule is null");
             }
 
+            return BestSchedule;
+        }
+
+        private void CheckIfGivenScheduleIsTheBest(Schedule currentSchedule)
+        {
+            if (BestSchedule.UniqueMoviesCount < currentSchedule.UniqueMoviesCount)
+            {
+                BestSchedule = Schedule.CreateSchedule(currentSchedule);
+            }
         }
     }
 }
