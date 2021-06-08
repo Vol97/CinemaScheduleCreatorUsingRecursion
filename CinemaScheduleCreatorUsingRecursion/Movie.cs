@@ -9,12 +9,17 @@ namespace CinemaScheduleCreatorUsingRecursion
         public string MovieTitle { get; set; }
         public int RunningTimeInMinutes { get; set; }
 
-        public Movie(string movieTitle, int runningTimeInMinutes)
+        private Movie(string movieTitle, int runningTimeInMinutes)
+        {
+            MovieTitle = movieTitle;
+            RunningTimeInMinutes = runningTimeInMinutes;
+        }
+
+        public static Movie CreateMovie(string movieTitle, int runningTimeInMinutes)
         {
             if (!(movieTitle is null) && runningTimeInMinutes >= 0)
             {
-                MovieTitle = movieTitle;
-                RunningTimeInMinutes = runningTimeInMinutes;
+                return new Movie(movieTitle, runningTimeInMinutes);
             }
             else if (movieTitle is null)
             {
@@ -50,7 +55,7 @@ namespace CinemaScheduleCreatorUsingRecursion
 
         public int CompareTo(object obj)
         {
-            if(obj is Movie)
+            if (obj is Movie)
             {
                 Movie movie = (Movie)obj;
                 int result;

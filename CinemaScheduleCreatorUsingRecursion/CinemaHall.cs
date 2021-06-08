@@ -12,10 +12,8 @@ namespace CinemaScheduleCreatorUsingRecursion
 
         public static List<Movie> Movies
         {
-            get
-            {
-                return _movies;
-            }
+            get => _movies;
+
             set
             {
                 if (!(value is null))
@@ -31,10 +29,8 @@ namespace CinemaScheduleCreatorUsingRecursion
 
         public static int WorkingTime
         {
-            get
-            {
-                return _workingTime;
-            }
+            get => _workingTime;
+
             set
             {
                 if (value >= 0)
@@ -50,10 +46,8 @@ namespace CinemaScheduleCreatorUsingRecursion
 
         public Schedule BestSchedule
         {
-            get
-            {
-                return _bestSchedule;
-            }
+            get => _bestSchedule;
+
             set
             {
                 if (!(value is null))
@@ -94,7 +88,7 @@ namespace CinemaScheduleCreatorUsingRecursion
             throw new ArgumentException();
         }
 
-        public void CreateSchedule(Schedule currentSchedule)
+        public Schedule CreateSchedule(Schedule currentSchedule)
         {
             if (currentSchedule != null)
             {
@@ -106,11 +100,6 @@ namespace CinemaScheduleCreatorUsingRecursion
                     {
                         CreateSchedule(currentSchedule);
                         movieIsAdded = true;
-                    }
-
-                    if (BestSchedule.UniqueMoviesCount == Movies.Count && BestSchedule.FreeTime == 0)
-                    {
-                        return;
                     }
 
                     CheckIfGivenScheduleIsTheBest(currentSchedule);
@@ -125,18 +114,15 @@ namespace CinemaScheduleCreatorUsingRecursion
             {
                 throw new ArgumentNullException("Current schedule is null");
             }
+
+            return BestSchedule;
         }
 
         private void CheckIfGivenScheduleIsTheBest(Schedule currentSchedule)
         {
-            if (currentSchedule.FreeTime == 0 &&
-                Movies.Count == currentSchedule.UniqueMoviesCount)
+            if (BestSchedule.UniqueMoviesCount < currentSchedule.UniqueMoviesCount)
             {
-                BestSchedule = new Schedule(currentSchedule);
-            }
-            else if (currentSchedule.UniqueMoviesCount > BestSchedule.UniqueMoviesCount)
-            {
-                BestSchedule = new Schedule(currentSchedule);
+                BestSchedule = Schedule.CreateSchedule(currentSchedule);
             }
         }
     }

@@ -17,9 +17,19 @@ namespace CinemaScheduleCreatorUsingRecursion
             MoviesInSchedule = new List<Movie>();
         }
 
-        public Schedule(Schedule schedule)
+        private Schedule(Schedule schedule)
         {
             MoviesInSchedule = new List<Movie>(schedule.MoviesInSchedule);
+        }
+
+        public static Schedule CreateSchedule(Schedule schedule)
+        {
+            if (!(schedule is null) && !(schedule.MoviesInSchedule is null))
+            {
+                return new Schedule(schedule);
+            }
+
+            throw new ArgumentNullException();
         }
 
         public bool AddMovie(Movie movie)
@@ -70,7 +80,7 @@ namespace CinemaScheduleCreatorUsingRecursion
 
             foreach (Movie movie in MoviesInSchedule)
             {
-                if(uniqueMovies.Contains(movie))
+                if (uniqueMovies.Contains(movie))
                 {
                     uniqueMovies.Remove(movie);
                     count++;

@@ -9,20 +9,15 @@ namespace CinemaScheduleCreatorUsingRecursion
         {
             List<Movie> movies = new List<Movie>()
             {
-                new Movie("AAA", 5),
-                new Movie("BBB", 10),
-                new Movie("CCC", 15),
-                new Movie("DDD", 20),
-                new Movie("EEE", 20),
-                new Movie("FFF", 20)
+                Movie.CreateMovie("AAA", 5),
+                Movie.CreateMovie("BBB", 10),
+                Movie.CreateMovie("CCC", 15),
+                Movie.CreateMovie("DDD", 20)
             };
 
-            CinemaHall cinemaHall = CinemaHall.CreateCinemaHall(movies, 150);
+            CinemaHall cinemaHall = CinemaHall.CreateCinemaHall(movies, 100);
             Schedule schedule = new Schedule();
-
-            cinemaHall.CreateSchedule(schedule);
-
-            Console.WriteLine(cinemaHall.BestSchedule);
+            Console.WriteLine(cinemaHall.CreateSchedule(schedule));
         }
     }
 }
